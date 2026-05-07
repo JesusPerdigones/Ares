@@ -16,6 +16,12 @@ Built with Angular 19 · Signals · TailwindCSS v4 · Fluent UI Icons · RxJS
 [![Fluent Icons](https://img.shields.io/badge/Fluent_UI-Icons-0078D4?logo=microsoft)](https://icon-sets.iconify.design/fluent/)
 [![Status](https://img.shields.io/badge/Status-MVP%20Pre--Seed-22d3ee)](.)
 
+<br/>
+
+![ARES Platform — Operational Dashboard](./images/dashboard-ares.png)
+
+*Operational Dashboard · 2026 Calm Intelligence design · Fluent UI icons*
+
 </div>
 
 ---

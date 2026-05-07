@@ -1,1 +1,414 @@
-/* You can add global styles to this file, and also import other style files */
+/* ==========================================================================
+   ARES Platform — Global Styles v2.0
+   Design Language: 2026 Calm Intelligence (Linear/Vercel-inspired)
+   Philosophy: Whitespace as architecture · Typography over decoration
+               Color only for data semantics · No decorative borders
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* Tailwind v4 CSS import */
+@import "tailwindcss";
+
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  /* Brand accent */
+  --color-primary:   #22d3ee;  /* cyan — IP addresses, active accents */
+  --color-secondary: #8b5cf6;  /* violet — UDP, exercises */
+  --color-danger:    #ef4444;
+  --color-warning:   #f59e0b;
+  --color-success:   #10b981;
+  --color-info:      #3b82f6;
+
+  /* Protocol badge palette (semantic, like V0 template) */
+  --proto-tcp:   #3b82f6;
+  --proto-udp:   #8b5cf6;
+  --proto-http:  #22c55e;
+  --proto-https: #10b981;
+  --proto-dns:   #f59e0b;
+  --proto-icmp:  #22d3ee;
+  --proto-ssh:   #f43f5e;
+  --proto-ftp:   #eab308;
+
+  /* Backgrounds — V0-inspired near-black */
+  --bg-base:    #09090b;   /* page background */
+  --bg-surface: #0e0e11;   /* sidebar, topbar */
+  --bg-card:    #111113;   /* content panels */
+  --bg-elevated:#18181b;   /* hover rows, active */
+  --bg-overlay: #27272a;   /* inputs, chips */
+
+  /* Borders */
+  --border-subtle:  rgba(255,255,255,0.05);
+  --border-default: rgba(255,255,255,0.08);
+  --border-strong:  rgba(255,255,255,0.13);
+  --border-primary: rgba(34,211,238,0.25);
+
+  /* Text */
+  --text-primary:   #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-tertiary:  #52525b;
+  --text-muted:     #3f3f46;
+  --text-accent:    #22d3ee;
+
+  /* Spacing scale — strict 8px base */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+
+  /* Aliases kept for backward compat */
+  --space-1: var(--sp-1); --space-2: var(--sp-2);
+  --space-3: var(--sp-3); --space-4: var(--sp-4);
+  --space-5: var(--sp-5); --space-6: var(--sp-6);
+  --space-8: var(--sp-8);
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Radius — gentle, not aggressive */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+
+  /* Transitions */
+  --transition-fast: 100ms ease;
+  --transition-base: 180ms ease;
+  --transition-slow: 300ms ease;
+
+  /* Shadows — ambient only */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
+  --shadow-primary: 0 0 16px rgba(0,212,255,0.12);
+
+  /* Z-index */
+  --z-base: 0; --z-elevated: 10; --z-dropdown: 100;
+  --z-modal: 500; --z-toast: 1000;
+
+  /* Shell */
+  --topbar-height: 56px;
+  --sidebar-width: 220px;
+  --sidebar-collapsed-width: 60px;
+}
+
+/* ============================================================
+   RESET
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-default); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
+
+/* ============================================================
+   SECTION CARD — flat, borderless content region
+   2026 style: bg variation instead of border
+   ============================================================ */
+.ares-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  /* No backdrop-filter: costs GPU, rarely needed */
+}
+
+/* Kept for legacy compat only — map to flat card */
+.ares-card--primary { border-color: var(--border-primary); }
+
+/* ============================================================
+   STATUS DOT
+   ============================================================ */
+.status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+
+  &.online  { background: var(--color-success); }
+  &.offline { background: var(--text-tertiary); }
+  &.warning { background: var(--color-warning); }
+  &.danger  { background: var(--color-danger); }
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes pulse-glow {
+  0%,100% { opacity:1; }
+  50%     { opacity:0.5; }
+}
+.pulse-live { animation: pulse-glow 2s ease-in-out infinite; }
+
+@keyframes fadeInUp {
+  from { opacity:0; transform: translateY(10px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+.animate-fade-in-up { animation: fadeInUp 0.3s ease forwards; }
+
+@keyframes dataStream {
+  from { opacity:0; transform: translateY(-3px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+.animate-data-stream { animation: dataStream 0.25s ease forwards; }
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ============================================================
+   TYPOGRAPHY SCALE
+   ============================================================ */
+.text-display   { font-size: 48px; font-weight: 700; letter-spacing: -0.03em; }
+.text-headline  { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+.text-title     { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
+.text-body-lg   { font-size: 15px; font-weight: 400; }
+.text-body      { font-size: 13px; font-weight: 400; }
+.text-caption   { font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-tertiary); }
+.text-mono      { font-family: var(--font-mono); font-size: 12px; letter-spacing: -0.01em; }
+.text-gradient-primary {
+  background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+/* ============================================================
+   BADGE — minimal pill
+   ============================================================ */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 1px 7px;
+  border-radius: 100px;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase;
+  border: 1px solid transparent;
+
+  &.badge--critical { background: rgba(239,68,68,0.12);   color: #f87171; border-color: rgba(239,68,68,0.2); }
+  &.badge--high     { background: rgba(245,158,11,0.12);  color: #fbbf24; border-color: rgba(245,158,11,0.2); }
+  &.badge--medium   { background: rgba(59,130,246,0.12);  color: #60a5fa; border-color: rgba(59,130,246,0.2); }
+  &.badge--low      { background: rgba(16,185,129,0.12);  color: #34d399; border-color: rgba(16,185,129,0.2); }
+  &.badge--info     { background: rgba(0,212,255,0.08);   color: #22d3ee; border-color: rgba(0,212,255,0.2); }
+  &.badge--neutral  { background: rgba(148,163,184,0.08); color: var(--text-secondary); border-color: var(--border-default); }
+}
+
+/* ============================================================
+   BUTTON
+   ============================================================ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans); font-size: 13px; font-weight: 500;
+  cursor: pointer; border: 1px solid transparent;
+  transition: all var(--transition-fast);
+  text-decoration: none; white-space: nowrap;
+  letter-spacing: -0.01em;
+
+  &:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+
+  &.btn--primary {
+    background: var(--color-primary); color: #000; font-weight: 600;
+    &:hover { filter: brightness(1.1); box-shadow: var(--shadow-primary); }
+  }
+
+  &.btn--ghost {
+    background: transparent; color: var(--text-secondary); border-color: var(--border-default);
+    &:hover { background: var(--bg-elevated); color: var(--text-primary); border-color: var(--border-strong); }
+  }
+
+  &.btn--danger {
+    background: rgba(239,68,68,0.08); color: #f87171; border-color: rgba(239,68,68,0.2);
+    &:hover { background: rgba(239,68,68,0.14); }
+  }
+
+  &.btn--sm  { padding: 3px 9px; font-size: 12px; border-radius: var(--radius-sm); }
+  &.btn--icon { padding: 6px; width: 32px; height: 32px; }
+}
+
+/* ============================================================
+   INPUT
+   ============================================================ */
+.ares-input {
+  background: var(--bg-overlay); border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-primary); font-family: var(--font-sans); font-size: 13px;
+  padding: 7px 11px; width: 100%;
+  transition: border-color var(--transition-fast);
+
+  &::placeholder { color: var(--text-tertiary); }
+  &:focus { outline: none; border-color: var(--border-strong); background: var(--bg-elevated); }
+}
+
+/* ============================================================
+   TABLE — Linear-style: rows not cards
+   ============================================================ */
+.ares-table {
+  width: 100%; border-collapse: collapse; font-size: 13px;
+
+  th {
+    padding: 8px 16px;
+    text-align: left;
+    color: var(--text-tertiary);
+    font-weight: 500; font-size: 11px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    border-bottom: 1px solid var(--border-subtle);
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 11px 16px;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: middle;
+  }
+
+  tr {
+    transition: background var(--transition-fast);
+    &:hover td { background: var(--bg-elevated); }
+    &:last-child td { border-bottom: none; }
+  }
+}
+
+/* ============================================================
+   PAGE LAYOUT — consistent page padding
+   ============================================================ */
+.page-header {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  margin-bottom: var(--sp-8);
+}
+
+.page-title {
+  font-size: 22px; font-weight: 700; letter-spacing: -0.02em;
+  color: var(--text-primary); line-height: 1.2;
+}
+
+.page-subtitle {
+  font-size: 12px; color: var(--text-tertiary);
+  margin-top: 4px; font-family: var(--font-mono);
+  letter-spacing: -0.01em;
+}
+
+/* ============================================================
+   SECTION — borderless regions with heading
+   ============================================================ */
+.section {
+  display: flex; flex-direction: column; gap: var(--sp-4);
+}
+
+.section-label {
+  font-size: 11px; font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+
+/* ============================================================
+   METRIC ROW — "stat next to label" pattern (Linear-style)
+   ============================================================ */
+.metric-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 13px;
+
+  &:last-child { border-bottom: none; }
+}
+
+.metric-label { color: var(--text-secondary); }
+.metric-value { color: var(--text-primary); font-weight: 600; font-family: var(--font-mono); }
+
+/* ============================================================
+   MINI BAR — inline progress bar
+   ============================================================ */
+.mini-bar {
+  height: 2px; border-radius: 1px;
+  background: var(--bg-overlay); overflow: hidden; flex: 1;
+
+  &__fill { height: 100%; border-radius: 1px; transition: width 0.5s ease; }
+}
+
+/* ============================================================
+   SKELETON — loading state
+   ============================================================ */
+.skeleton {
+  background: linear-gradient(90deg,
+    var(--bg-elevated) 25%,
+    var(--bg-overlay) 50%,
+    var(--bg-elevated) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+/* ============================================================
+   FILTER CHIP
+   ============================================================ */
+.filter-chip {
+  padding: 4px 10px; border-radius: 100px;
+  border: 1px solid var(--border-default);
+  background: transparent; color: var(--text-secondary);
+  font-size: 12px; font-weight: 500; cursor: pointer;
+  transition: all var(--transition-fast); white-space: nowrap;
+
+  &:hover { background: var(--bg-elevated); color: var(--text-primary); border-color: var(--border-strong); }
+  &.active { background: var(--bg-elevated); color: var(--text-primary); border-color: var(--border-strong); }
+}
+
+/* ============================================================
+   LIVE BADGE
+   ============================================================ */
+.live-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px;
+  background: rgba(16,185,129,0.08);
+  border: 1px solid rgba(16,185,129,0.15);
+  border-radius: 100px;
+  font-size: 11px; font-weight: 600;
+  color: var(--color-success); letter-spacing: 0.04em;
+}
+
+/* ============================================================
+   SEVERITY INDICATOR
+   ============================================================ */
+.sev-indicator {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+  padding: 2px 6px; border-radius: var(--radius-sm);
+}
+.sev--critical { background: rgba(239,68,68,0.12);  color: #f87171; }
+.sev--high     { background: rgba(245,158,11,0.12); color: #fbbf24; }
+.sev--medium   { background: rgba(59,130,246,0.12); color: #60a5fa; }
+.sev--low      { background: rgba(16,185,129,0.12); color: #34d399; }
+.sev--info     { background: rgba(148,163,184,0.08); color: var(--text-secondary); }
+.sev-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1024px) {
+  :root { --sidebar-width: 200px; }
+}
+@media (max-width: 768px) {
+  :root { --sidebar-width: var(--sidebar-collapsed-width); }
+}
